@@ -1,43 +1,46 @@
-// SkillBridge AI – Main Application Entry Point
-// Handles routing between all pages using React Router
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import PlannerPage from './pages/PlannerPage';
-import ProgressPage from './pages/ProgressPage';
-import AuthPage from './pages/AuthPage';
-import './index.css';
+import Home from './pages/Home';
+import Planner from './pages/Planner';
+import Progress from './pages/Progress';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
+/**
+ * Main App Component
+ * Sets up React Router and renders all pages with Navbar and Footer
+ */
 export default function App() {
   return (
     <Router>
-      {/* Fixed Navbar on top */}
-      <Navbar />
+      <div className="min-h-screen flex flex-col bg-white">
+        {/* Navigation Bar - Fixed at top */}
+        <Navbar />
 
-      {/* Main content area */}
-      <main className="min-h-screen">
-        <Routes>
-          {/* Home / Landing Page */}
-          <Route path="/" element={<HomePage />} />
+        {/* Main Content Area */}
+        <main className="flex-grow">
+          <Routes>
+            {/* Home/Landing Page Route */}
+            <Route path="/" element={<Home />} />
+            
+            {/* Planner Page Route - AI Learning Path Planner */}
+            <Route path="/planner" element={<Planner />} />
+            
+            {/* Progress Page Route - Track learning progress */}
+            <Route path="/progress" element={<Progress />} />
+            
+            {/* Login Page Route - User authentication */}
+            <Route path="/login" element={<Login />} />
+            
+            {/* Signup Page Route - User registration */}
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </main>
 
-          {/* Planner Page */}
-          <Route path="/planner" element={<PlannerPage />} />
-
-          {/* Progress Page */}
-          <Route path="/progress" element={<ProgressPage />} />
-
-          {/* Login / Signup Page */}
-          <Route path="/auth" element={<AuthPage />} />
-
-          {/* Catch-all: redirect to home */}
-          <Route path="*" element={<HomePage />} />
-        </Routes>
-      </main>
-
-      {/* Footer */}
-      <Footer />
+        {/* Footer - Fixed at bottom */}
+        <Footer />
+      </div>
     </Router>
   );
 }
