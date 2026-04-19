@@ -1,12 +1,7 @@
-/**
- * User Model
- * MongoDB schema for user data
- */
-
+// User Model - MongoDB Schema for Authentication
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// User Schema Definition
 const userSchema = new mongoose.Schema(
   {
     // User's full name
@@ -17,68 +12,57 @@ const userSchema = new mongoose.Schema(
       minlength: [2, 'Name must be at least 2 characters'],
       maxlength: [50, 'Name cannot exceed 50 characters'],
     },
-
-    // User's email address (unique)
+    // User's email (unique identifier)
     email: {
       type: String,
       required: [true, 'Email is required'],
       unique: true,
       lowercase: true,
       trim: true,
-      match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email'],
+      match: [
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        'Please provide a valid email address',
+      ],
     },
-
-    // User's password (hashed)
+    // Hashed password (never store plain text)
     password: {
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
-      select: false, // Don't return password by default
+      select: false, // Don't return password by default in queries
     },
-
-    // User type: student or professional
+    // User type: Student or Professional
     userType: {
       type: String,
-      enum: ['student', 'professional'],
       required: [true, 'User type is required'],
-      default: 'student',
+      enum: ['Student', 'Professional'],
+      default: 'Student',
     },
-
-    // User's profile picture URL
-    profilePicture: {
-      type: String,
-      default: '',
+    // Account status
+    isActive: {
+      type: Boolean,
+      default: true,
     },
-
-    // User's learning progress
-    progress: {
-      overallProgress: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 100,
-      },
-      completedModules: {
-        type: Number,
-        default: 0,
-      },
-      assessmentsCompleted: {
-        type: Number,
-        default: 0,
-      },
-      skillScore: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 100,
-      },
+    // Profile completion percentage
+    profileCompleteness: {
+      type: Number,
+      default: 0,
     },
-
-    // User's enrolled learning paths
-    enrolledPaths: [
+    // Skills array (for future skill tracking)
+    skills: [
       {
-        pathId: String,
-        pathName: String,
+        name: String,
+        level: {
+          type: String,
+          enum: ['Beginner', 'Intermediate', 'Advanced'],
+          default: 'Beginner',
+        },
+      },
+    ],
+    // Enrolled courses (for future course tracking)
+    enrolledCourses: [
+      {
+        courseId: mongoose.Schema.Types.ObjectId,
         enrolledAt: {
           type: Date,
           default: Date.now,
@@ -87,42 +71,18 @@ const userSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
-        completedModules: [String],
       },
     ],
-
-    // User's skill assessments
-    skills: {
-      promptEngineering: { type: Number, default: 0 },
-      aiTools: { type: Number, default: 0 },
-      automation: { type: Number, default: 0 },
-      mlFundamentals: { type: Number, default: 0 },
-      interviewPrep: { type: Number, default: 0 },
-    },
-
-    // Account status
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-
-    // Email verification status
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
-    // Automatically add createdAt and updatedAt fields
+    // Automatically add createdAt and updatedAt timestamps
     timestamps: true,
   }
 );
 
-/**
- * Pre-save middleware to hash password before saving
- */
+// Pre-save middleware to hash password before saving to database
 userSchema.pre('save', async function (next) {
-  // Only hash password if it's modified
+  // Only hash password if it's modified or new
   if (!this.isModified('password')) {
     return next();
   }
@@ -137,26 +97,18 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-/**
- * Method to compare password with hashed password
- * @param {string} candidatePassword - Password to compare
- * @returns {Promise<boolean>} - True if passwords match
- */
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+// Instance method to compare entered password with hashed password
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
-/**
- * Method to get public user data (without sensitive info)
- * @returns {object} - Public user data
- */
+// Instance method to get public user data (without sensitive info)
 userSchema.methods.getPublicProfile = function () {
   const user = this.toObject();
   delete user.password;
   return user;
 };
 
-// Create and export the User model
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

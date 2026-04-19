@@ -9,8 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/axios": "^0.9.36",
+    "axios": "^1.15.0",
+    "bcryptjs": "^3.0.3",
     "clsx": "2.1.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.8.0",
+    "mongoose": "^9.4.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-router-dom": "^7.14.1",

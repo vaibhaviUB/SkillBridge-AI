@@ -1,323 +1,465 @@
-# SkillBridge AI – AI Skill Gap Detection & Career Readiness Platform
+# SkillBridge AI 🚀
 
-![SkillBridge AI](https://img.shields.io/badge/SkillBridge-AI-violet)
-![React](https://img.shields.io/badge/React-19.2.3-blue)
-![Node.js](https://img.shields.io/badge/Node.js-Express-green)
-![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-orange)
+**AI Skill Gap Detection & Career Readiness Platform**
 
-## 📖 Project Overview
+A comprehensive MERN stack application designed to bridge the gap between AI learning and industry requirements. SkillBridge AI helps engineering students and working professionals master practical AI skills, assess their knowledge, and prepare for technical interviews with AI-powered guidance.
 
-**SkillBridge AI** is an AI-powered career readiness platform designed to bridge the gap between AI learning and industry requirements. With over 3 lakh tech professionals losing their jobs in 2024 due to lack of AI skills, this platform helps engineering students and working professionals acquire practical AI knowledge and prepare for technical interviews.
+---
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [API Documentation](#api-documentation)
+- [Environment Variables](#environment-variables)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## 🎯 Overview
 
 ### Problem Statement
-
-- Over 3 lakh tech professionals lost their jobs in 2024 due to lack of AI skills
-- Engineering students struggle with technical interviews due to lack of practical AI knowledge
-- College curricula remain outdated and focus on theoretical concepts
-- Students don't know which AI skills are required by companies
+Over 3 lakh tech professionals lost their jobs in 2024 due to lack of AI skills. Engineering students and working professionals struggle in technical interviews due to outdated college curricula and lack of practical AI tool knowledge.
 
 ### Solution
+SkillBridge AI is an AI-powered career readiness platform that:
+1. **LEARN** - Access structured AI learning paths
+2. **ASSESS** - Take AI-based skill assessments and mock interviews
+3. **PREPARE** - Receive skill-gap reports and interview guidance
 
-SkillBridge AI provides a three-step approach:
+---
 
-1. **LEARN** - Access structured AI learning paths covering prompt engineering, AI tools, automation workflows, and real-world applications
-2. **ASSESS** - Take AI-based skill assessments, quizzes, and simulated HR interviews
-3. **PREPARE** - Receive personalized skill-gap reports, improvement suggestions, and interview preparation guidance
+## ✨ Features
 
-## 🎯 Target Users
+### Frontend Features
+- ✅ **Landing Page** - Modern, responsive homepage with CTAs
+- ✅ **Authentication** - Login/Signup with validation
+- ✅ **Dashboard** - Personalized user dashboard with progress tracking
+- ✅ **Course Management** - Browse, enroll, and track AI courses
+- ✅ **Learning Planner** - Structured learning paths
+- ✅ **Progress Tracking** - Visual progress bars and statistics
+- ✅ **Responsive Design** - Mobile-first, works on all devices
+- ✅ **Modern UI** - Clean, professional design with Tailwind CSS
 
-- Final year engineering students
-- Fresh graduates
-- Working professionals who want to upskill in AI
+### Backend Features
+- ✅ **User Authentication** - JWT-based secure authentication
+- ✅ **Password Security** - Bcrypt password hashing
+- ✅ **User Management** - CRUD operations for user profiles
+- ✅ **Protected Routes** - Middleware for route protection
+- ✅ **Error Handling** - Comprehensive error management
+- ✅ **CORS Configuration** - Secure cross-origin requests
+- ✅ **MongoDB Integration** - Mongoose ODM for database operations
 
-## 📦 Features (Task 1 & 2)
-
-### Frontend
-- ✅ Responsive Navigation Bar with logo and menu items
-- ✅ Landing Page with hero section, features, and CTAs
-- ✅ **Dashboard Page** - Main user interface after login with sidebar navigation
-- ✅ Learning Path Planner with interactive course selection
-- ✅ Progress Dashboard with skill tracking and analytics
-- ✅ Login Page with email, password, and user type selection
-- ✅ Signup Page with form validation and password strength indicator
-- ✅ Footer with social links and quick navigation
-- ✅ React Router for seamless page navigation
-- ✅ Mobile-responsive design with hamburger menu
-- ✅ **Dashboard Components** - Reusable Sidebar, WelcomeSection, DashboardCard, ProgressSection, RecentActivity
-
-### Backend
-- ✅ Express.js server setup
-- ✅ MongoDB connection configuration
-- ✅ User model with authentication fields
-- ✅ API route placeholders for auth, users, skills, assessments
-- ✅ CORS and middleware configuration
-- ✅ Error handling middleware
-
-### Dashboard Features (Task 2)
-- ✅ **Sidebar Navigation** - Collapsible sidebar with Dashboard, Planner, Progress, Assessments, Interview Prep, and Logout
-- ✅ **Welcome Section** - Dynamic greeting based on time, user name, and motivational message
-- ✅ **Feature Cards** - 4 core action cards (Learning Path, Skill Assessment, Skill Gap Analysis, Interview Prep)
-- ✅ **Progress Overview** - Stats cards showing courses completed, assessments taken, and readiness score with progress bar
-- ✅ **Recent Activity** - Activity feed showing user's recent learning activities
-- ✅ **Recommendations** - Personalized recommendations for next steps
-- ✅ **Mobile Responsive** - Hamburger menu for mobile, full sidebar for desktop
-
-## 🏗️ Project Structure
-
-```
-skillbridge-ai/
-├── frontend/                    # React Frontend
-│   ├── src/
-│   │   ├── components/          # Reusable UI components
-│   │   │   ├── Navbar.tsx       # Navigation bar component
-│   │   │   ├── Footer.tsx       # Footer component
-│   │   │   └── dashboard/       # Dashboard-specific components
-│   │   │       ├── Sidebar.tsx              # Dashboard sidebar navigation
-│   │   │       ├── DashboardCard.tsx        # Feature card component
-│   │   │       ├── WelcomeSection.tsx       # Welcome header component
-│   │   │       ├── ProgressSection.tsx      # Progress stats component
-│   │   │       └── RecentActivity.tsx       # Activity feed component
-│   │   ├── pages/               # Page components
-│   │   │   ├── Home.tsx         # Landing page
-│   │   │   ├── Dashboard.tsx    # Main dashboard page (Task 2)
-│   │   │   ├── Planner.tsx      # Learning path planner
-│   │   │   ├── Progress.tsx     # Progress dashboard
-│   │   │   ├── Login.tsx        # Login page
-│   │   │   └── Signup.tsx       # Signup page
-│   │   ├── utils/
-│   │   │   └── cn.ts            # Class name utility
-│   │   ├── App.tsx              # Main app with routing
-│   │   ├── main.tsx             # Entry point
-│   │   └── index.css            # Global styles
-│   ├── index.html               # HTML template
-│   ├── package.json             # Frontend dependencies
-│   ├── vite.config.ts           # Vite configuration
-│   └── tsconfig.json            # TypeScript configuration
-│
-├── backend/                     # Node.js Backend
-│   ├── config/
-│   │   └── database.js          # MongoDB connection
-│   ├── models/
-│   │   └── User.js              # User schema
-│   ├── routes/                  # API routes (placeholders)
-│   ├── .env.example             # Environment variables template
-│   ├── package.json             # Backend dependencies
-│   └── server.js                # Express server
-│
-└── README.md                    # Project documentation
-```
-
-## 🚀 Installation & Setup
-
-### Prerequisites
-
-- Node.js (v18 or higher)
-- npm or yarn
-- MongoDB (local or MongoDB Atlas)
-
-### Frontend Setup
-
-1. **Navigate to the project root:**
-   ```bash
-   cd skillbridge-ai
-   ```
-
-2. **Install frontend dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-
-4. **Open in browser:**
-   ```
-   http://localhost:5173
-   ```
-
-### Backend Setup
-
-1. **Navigate to the backend folder:**
-   ```bash
-   cd backend
-   ```
-
-2. **Install backend dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Create environment file:**
-   ```bash
-   cp .env.example .env
-   ```
-
-4. **Update `.env` with your configuration:**
-   ```env
-   PORT=5000
-   NODE_ENV=development
-   MONGODB_URI=mongodb://localhost:27017/skillbridge-ai
-   JWT_SECRET=your-secret-key
-   ```
-
-5. **Start the backend server:**
-   ```bash
-   # Development mode (with auto-reload)
-   npm run dev
-
-   # Production mode
-   npm start
-   ```
-
-6. **API will be available at:**
-   ```
-   http://localhost:5000/api
-   ```
-
-## 📱 Pages & Routes
-
-| Route | Page | Description |
-|-------|------|-------------|
-| `/` | Home | Landing page with hero section and features |
-| `/planner` | Planner | AI learning path selection and planning |
-| `/progress` | Progress | User progress dashboard and skill tracking |
-| `/login` | Login | User authentication page |
-| `/signup` | Signup | User registration page |
-
-## 🎨 Design Guidelines
-
-### Color Scheme
-- **Primary:** Violet (#7C3AED) to Indigo (#4F46E5)
-- **Secondary:** Blue, Cyan, Emerald accents
-- **Background:** White, Gray-50, Violet-50
-- **Text:** Gray-900 (headings), Gray-600 (body)
-
-### Typography
-- **Headings:** Bold, tracking-tight
-- **Body:** Regular weight, relaxed line-height
-- **Buttons:** Semibold, uppercase optional
-
-### Components
-- **Buttons:** Rounded-xl, gradient backgrounds, shadow effects
-- **Cards:** Rounded-2xl, subtle borders, hover animations
-- **Inputs:** Rounded-xl, focus rings, error states
-- **Navbar:** Fixed position, backdrop blur, mobile responsive
-
-## 🔌 API Endpoints (Planned)
-
-### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/signup` - User registration
-- `POST /api/auth/logout` - User logout
-- `GET /api/auth/me` - Get current user
-
-### Users
-- `GET /api/users/:id` - Get user profile
-- `PUT /api/users/:id` - Update user profile
-- `DELETE /api/users/:id` - Delete user account
-
-### Skills & Assessments
-- `GET /api/skills` - Get available skills
-- `POST /api/skills/assess` - Submit skill assessment
-- `GET /api/assessments` - Get user assessments
-- `POST /api/assessments` - Create new assessment
-
-### Learning Paths
-- `GET /api/paths` - Get all learning paths
-- `GET /api/paths/:id` - Get specific learning path
-- `POST /api/paths/enroll` - Enroll in a learning path
-
-## 🤖 AI Integration (Future)
-
-The platform will integrate with **Google Gemini AI** for:
-- Personalized learning recommendations
-- Skill gap analysis
-- Interview question generation
-- Progress insights and suggestions
-
-### Gemini API Setup (Optional)
-```javascript
-// Example usage in backend
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-const result = await model.generateContent('Generate AI interview questions');
-```
-
-## 📊 Business Model
-
-- **Course Subscriptions** - Monthly/annual plans for students
-- **Placement Fees** - Commission from hiring companies
-- **Enterprise Training** - Corporate AI training programs
-
-## 🎯 Market Opportunity
-
-- 15 lakh engineering graduates per year in India
-- AI upskilling market worth $6 billion by 2027
-- Growing demand for AI-skilled professionals
+---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 19** - UI library
-- **React Router** - Client-side routing
-- **Tailwind CSS 4** - Styling framework
-- **TypeScript** - Type safety
-- **Vite** - Build tool
+- **React 18** - UI library with TypeScript
+- **Vite** - Fast build tool and dev server
+- **React Router v6** - Client-side routing
+- **Tailwind CSS** - Utility-first CSS framework
+- **Axios** - HTTP client for API requests
+- **Lucide React** - Beautiful icon library
 
 ### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-
-## 📝 Form Validation
-
-### Login Form
-- Email format validation
-- Password required (min 6 characters)
-- User type selection (Student/Professional)
-
-### Signup Form
-- Name required (min 2 characters)
-- Email format validation
-- Password strength indicator
-- Password confirmation match
-- User type selection
-- Terms acceptance
-
-## 🔐 Security Features (Planned)
-
-- Password hashing with bcrypt
-- JWT-based authentication
-- CORS protection
-- Input validation and sanitization
-- Rate limiting
-- HTTPS enforcement
-
-## 📄 License
-
-MIT License - feel free to use this project for learning and development.
-
-## 👥 Contributors
-
-Built with ❤️ for aspiring AI professionals.
-
-## 📞 Contact
-
-For questions or contributions, please reach out through the project repository.
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web application framework
+- **MongoDB** - NoSQL database
+- **Mongoose** - MongoDB ODM
+- **JWT** - JSON Web Tokens for authentication
+- **Bcrypt.js** - Password hashing
+- **Dotenv** - Environment variable management
+- **CORS** - Cross-origin resource sharing
 
 ---
 
-**Note:** This is Task 1 of the SkillBridge AI project. Future tasks will include:
-- Task 2: Complete authentication system with JWT
-- Task 3: AI skill assessment implementation
-- Task 4: Progress tracking and analytics
-- Task 5: Gemini AI integration for personalized recommendations
-- Task 6: Admin dashboard and content management
+## 📁 Project Structure
+
+```
+skillbridge-ai/
+├── public/                 # Static assets
+├── src/                    # Frontend source code
+│   ├── components/         # Reusable UI components
+│   │   ├── Navbar.tsx
+│   │   ├── Footer.tsx
+│   │   └── dashboard/      # Dashboard components
+│   │       ├── Sidebar.tsx
+│   │       ├── DashboardCard.tsx
+│   │       ├── WelcomeSection.tsx
+│   │       ├── ProgressSection.tsx
+│   │       └── RecentActivity.tsx
+│   │   └── courses/        # Course components
+│   │       ├── CourseCard.tsx
+│   │       ├── EnrolledCourseCard.tsx
+│   │       ├── ModuleList.tsx
+│   │       ├── ProgressBar.tsx
+│   │       └── CourseTabs.tsx
+│   ├── pages/              # Page components
+│   │   ├── Home.tsx        # Landing page
+│   │   ├── Login.tsx       # Login page
+│   │   ├── Signup.tsx      # Signup page
+│   │   ├── Dashboard.tsx   # User dashboard
+│   │   ├── Planner.tsx     # Learning planner
+│   │   ├── Progress.tsx    # Progress tracking
+│   │   └── Courses.tsx     # Course management
+│   ├── App.tsx             # Main app component
+│   ├── main.tsx            # Entry point
+│   └── index.css           # Global styles
+├── backend/                # Backend source code
+│   ├── config/             # Configuration files
+│   │   └── db.js           # Database connection
+│   ├── controllers/        # Route controllers
+│   │   └── authController.js
+│   ├── middleware/         # Custom middleware
+│   │   └── authMiddleware.js
+│   ├── models/             # Mongoose models
+│   │   └── User.js
+│   ├── routes/             # API routes
+│   │   └── authRoutes.js
+│   ├── server.js           # Express server entry
+│   ├── .env                # Environment variables
+│   └── package.json        # Backend dependencies
+├── .env                    # Frontend environment variables
+├── .gitignore              # Git ignore rules
+├── index.html              # HTML template
+├── package.json            # Frontend dependencies
+├── tailwind.config.js      # Tailwind configuration
+├── tsconfig.json           # TypeScript configuration
+└── README.md               # Project documentation
+```
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+- **Node.js** (v18 or higher)
+- **MongoDB** (local installation or MongoDB Atlas)
+- **npm** or **yarn**
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/your-username/skillbridge-ai.git
+cd skillbridge-ai
+```
+
+### Step 2: Install Frontend Dependencies
+```bash
+npm install
+```
+
+### Step 3: Install Backend Dependencies
+```bash
+cd backend
+npm install
+cd ..
+```
+
+### Step 4: Configure Environment Variables
+
+#### Frontend (.env)
+Create a `.env` file in the root directory:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+#### Backend (backend/.env)
+Create a `backend/.env` file:
+```env
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# MongoDB Connection
+MONGODB_URI=mongodb://localhost:27017/skillbridge_ai
+
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+JWT_EXPIRE=7d
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:5173
+```
+
+### Step 5: Set Up MongoDB
+
+#### Option A: Local MongoDB
+1. Install MongoDB Community Edition
+2. Start MongoDB service:
+   ```bash
+   # Windows
+   net start MongoDB
+   
+   # macOS
+   brew services start mongodb-community
+   
+   # Linux
+   sudo systemctl start mongod
+   ```
+
+#### Option B: MongoDB Atlas (Cloud)
+1. Create account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a new cluster
+3. Get connection string
+4. Update `MONGODB_URI` in `backend/.env`
+
+---
+
+## 🚀 Running the Application
+
+### Start Backend Server
+```bash
+cd backend
+npm run dev
+```
+Backend will run on: `http://localhost:5000`
+
+### Start Frontend Development Server
+```bash
+# From root directory
+npm run dev
+```
+Frontend will run on: `http://localhost:5173`
+
+### Access the Application
+Open your browser and navigate to: `http://localhost:5173`
+
+---
+
+## 📡 API Documentation
+
+### Base URL
+```
+http://localhost:5000/api
+```
+
+### Authentication Endpoints
+
+#### 1. Register User
+```http
+POST /api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "userType": "Student"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "user": {
+      "_id": "user_id",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "userType": "Student"
+    },
+    "token": "jwt_token_here"
+  }
+}
+```
+
+#### 2. Login User
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "user": {
+      "_id": "user_id",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "userType": "Student"
+    },
+    "token": "jwt_token_here"
+  }
+}
+```
+
+#### 3. Get Current User (Protected)
+```http
+GET /api/auth/me
+Authorization: Bearer <token>
+```
+
+#### 4. Update Profile (Protected)
+```http
+PUT /api/auth/update-profile
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "name": "John Updated",
+  "userType": "Professional"
+}
+```
+
+#### 5. Logout (Protected)
+```http
+POST /api/auth/logout
+Authorization: Bearer <token>
+```
+
+### Health Check
+```http
+GET /api/health
+```
+
+---
+
+## 🔐 Environment Variables
+
+### Frontend (.env)
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_URL` | Backend API URL | `http://localhost:5000/api` |
+
+### Backend (backend/.env)
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `5000` |
+| `NODE_ENV` | Environment | `development` |
+| `MONGODB_URI` | MongoDB connection string | `mongodb://localhost:27017/skillbridge_ai` |
+| `JWT_SECRET` | JWT secret key | *(required)* |
+| `JWT_EXPIRE` | Token expiration | `7d` |
+| `FRONTEND_URL` | Frontend URL for CORS | `http://localhost:5173` |
+
+---
+
+## 🧪 Testing
+
+### Test API Endpoints with cURL
+
+#### Test Health Check
+```bash
+curl http://localhost:5000/api/health
+```
+
+#### Test Signup
+```bash
+curl -X POST http://localhost:5000/api/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test User","email":"test@example.com","password":"password123","userType":"Student"}'
+```
+
+#### Test Login
+```bash
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123"}'
+```
+
+### Test with Postman
+1. Import the API endpoints
+2. Set up environment variables
+3. Test authentication flow
+
+---
+
+## 🎨 UI/UX Features
+
+### Design Principles
+- **Clean & Modern** - Professional SaaS-style interface
+- **Responsive** - Mobile-first design approach
+- **Accessible** - WCAG compliant color contrast
+- **Consistent** - Unified color scheme and typography
+
+### Color Palette
+- **Primary**: Violet (#7C3AED) to Indigo (#4F46E5)
+- **Success**: Green (#10B981)
+- **Warning**: Yellow (#F59E0B)
+- **Error**: Red (#EF4444)
+- **Neutral**: Gray scale
+
+---
+
+## 📱 Pages Overview
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Home | `/` | Landing page with hero section |
+| Login | `/login` | User authentication |
+| Signup | `/signup` | User registration |
+| Dashboard | `/dashboard` | User dashboard with overview |
+| Courses | `/courses` | Browse and enroll in courses |
+| Planner | `/planner` | Learning path planner |
+| Progress | `/progress` | Track learning progress |
+
+---
+
+## 🔒 Security Features
+
+- ✅ Password hashing with bcrypt (10 salt rounds)
+- ✅ JWT token-based authentication
+- ✅ Protected routes with middleware
+- ✅ Input validation on frontend and backend
+- ✅ CORS configuration for cross-origin requests
+- ✅ Environment variables for sensitive data
+- ✅ No password storage in plain text
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## 👥 Team
+
+- **Project Lead**: SkillBridge AI Team
+- **Frontend**: React, TypeScript, Tailwind CSS
+- **Backend**: Node.js, Express, MongoDB
+
+---
+
+## 📞 Support
+
+For support, email support@skillbridgeai.com or open an issue in the repository.
+
+---
+
+## 🙏 Acknowledgments
+
+- React Team for the amazing library
+- Tailwind CSS for the utility-first framework
+- MongoDB for the database solution
+- All contributors to this project
+
+---
+
+**Built with ❤️ for bridging the AI skill gap**
