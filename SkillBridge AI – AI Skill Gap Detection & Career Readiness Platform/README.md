@@ -44,6 +44,9 @@ SkillBridge AI is an AI-powered career readiness platform that:
 - ✅ **Course Management** - Browse, enroll, and track AI courses
 - ✅ **Learning Planner** - Structured learning paths
 - ✅ **Progress Tracking** - Visual progress bars and statistics
+- ✅ **Assessment Module** - AI skill quizzes with 10 technical questions, timer, and results
+- ✅ **Assessment History** - Track all past assessment attempts with scores
+- ✅ **Result Analysis** - Detailed feedback and answer review
 - ✅ **Responsive Design** - Mobile-first, works on all devices
 - ✅ **Modern UI** - Clean, professional design with Tailwind CSS
 
