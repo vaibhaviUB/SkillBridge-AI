@@ -15,6 +15,7 @@ import Interview from './pages/Interview';
 import InterviewSession from './pages/InterviewSession';
 import InterviewResult from './pages/InterviewResult';
 import Report from './pages/Report';
+import Profile from './pages/Profile';
 
 /**
  * Main App Component
@@ -63,6 +64,9 @@ export default function App() {
             
             {/* Report Page Route - Skill Gap Analysis */}
             <Route path="/report" element={<Report />} />
+            
+            {/* Profile Page Route - User Profile Management */}
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </main>
 
