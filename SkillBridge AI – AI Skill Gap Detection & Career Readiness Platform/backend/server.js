@@ -15,6 +15,9 @@ dotenv.config();
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const assessmentRoutes = require('./routes/assessmentRoutes');
+const interviewRoutes = require('./routes/interviewRoutes');
 
 // Initialize Express app
 const app = express();
@@ -94,6 +97,28 @@ app.get('/api', (req, res) => {
         updateProfile: 'PUT /api/auth/update-profile (protected)',
         logout: 'POST /api/auth/logout (protected)',
       },
+      courses: {
+        getAll: 'GET /api/courses',
+        getById: 'GET /api/courses/:id',
+        enroll: 'POST /api/courses/:id/enroll (protected)',
+        enrolled: 'GET /api/courses/enrolled (protected)',
+        progress: 'PUT /api/courses/:id/progress (protected)',
+        recommended: 'GET /api/courses/recommended/for-you (protected)',
+      },
+      assessment: {
+        submit: 'POST /api/assessment (protected)',
+        history: 'GET /api/assessment/history (protected)',
+        stats: 'GET /api/assessment/stats (protected)',
+        latest: 'GET /api/assessment/latest (protected)',
+        getById: 'GET /api/assessment/:id (protected)',
+      },
+      interview: {
+        submit: 'POST /api/interview (protected)',
+        history: 'GET /api/interview/history (protected)',
+        stats: 'GET /api/interview/stats (protected)',
+        latest: 'GET /api/interview/latest (protected)',
+        getById: 'GET /api/interview/:id (protected)',
+      },
     },
     documentation: 'https://github.com/skillbridge-ai/api-docs',
   });
@@ -101,6 +126,15 @@ app.get('/api', (req, res) => {
 
 // Authentication routes
 app.use('/api/auth', authRoutes);
+
+// Course routes
+app.use('/api/courses', courseRoutes);
+
+// Assessment routes
+app.use('/api/assessment', assessmentRoutes);
+
+// Interview routes
+app.use('/api/interview', interviewRoutes);
 
 // ============================================
 // ERROR HANDLING
