@@ -90,11 +90,11 @@ export default function Signup() {
       console.log('Account created successfully!');
       setIsLoading(false);
       
-      // Navigate to login page after successful signup
-      navigate('/login');
+      // Navigate to dashboard after successful signup
+      navigate('/dashboard');
       
       // Show success message (in real app, this would be a toast notification)
-      alert('Account created successfully! Please log in to continue.');
+      alert('Account created successfully! Welcome to SkillBridge AI Dashboard.');
     }, 1000);
   };
 

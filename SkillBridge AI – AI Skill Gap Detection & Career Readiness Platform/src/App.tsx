@@ -6,6 +6,7 @@ import Planner from './pages/Planner';
 import Progress from './pages/Progress';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
 
 /**
  * Main App Component
@@ -24,6 +25,9 @@ export default function App() {
             {/* Home/Landing Page Route */}
             <Route path="/" element={<Home />} />
             
+            {/* Dashboard Page Route - Main user interface after login */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            
             {/* Planner Page Route - AI Learning Path Planner */}
             <Route path="/planner" element={<Planner />} />
             
@@ -35,6 +39,12 @@ export default function App() {
             
             {/* Signup Page Route - User registration */}
             <Route path="/signup" element={<Signup />} />
+            
+            {/* Assessment Page Route - Future feature */}
+            <Route path="/assessment" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-center"><h1 className="text-4xl font-bold text-gray-800 mb-4">📝 Assessment Page</h1><p className="text-gray-600">AI-powered skill assessments coming soon!</p></div></div>} />
+            
+            {/* Interview Prep Page Route - Future feature */}
+            <Route path="/interview" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-center"><h1 className="text-4xl font-bold text-gray-800 mb-4">🎤 Interview Preparation</h1><p className="text-gray-600">AI mock interviews coming soon!</p></div></div>} />
           </Routes>
         </main>
 
