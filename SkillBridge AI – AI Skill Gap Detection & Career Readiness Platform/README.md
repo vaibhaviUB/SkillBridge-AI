@@ -47,6 +47,8 @@ SkillBridge AI is an AI-powered career readiness platform that:
 - ✅ **Assessment Module** - AI skill quizzes with 10 technical questions, timer, and results
 - ✅ **Assessment History** - Track all past assessment attempts with scores
 - ✅ **Result Analysis** - Detailed feedback and answer review
+- ✅ **Mock Interview Module** - HR & Technical interview practice with AI feedback
+- ✅ **Interview Results** - Detailed performance analysis with skill breakdown
 - ✅ **Responsive Design** - Mobile-first, works on all devices
 - ✅ **Modern UI** - Clean, professional design with Tailwind CSS
 
@@ -104,6 +106,18 @@ skillbridge-ai/
 │   │       ├── ModuleList.tsx
 │   │       ├── ProgressBar.tsx
 │   │       └── CourseTabs.tsx
+│   │   └── assessment/     # Assessment components
+│   │       ├── QuestionCard.tsx
+│   │       ├── OptionButton.tsx
+│   │       ├── Timer.tsx
+│   │       ├── ResultCard.tsx
+│   │       └── HistoryTable.tsx
+│   │   └── interview/      # Interview components
+│   │       ├── InterviewCard.tsx
+│   │       ├── QuestionPanel.tsx
+│   │       ├── AnswerInput.tsx
+│   │       ├── FeedbackCard.tsx
+│   │       └── ScoreSummary.tsx
 │   ├── pages/              # Page components
 │   │   ├── Home.tsx        # Landing page
 │   │   ├── Login.tsx       # Login page
@@ -111,7 +125,13 @@ skillbridge-ai/
 │   │   ├── Dashboard.tsx   # User dashboard
 │   │   ├── Planner.tsx     # Learning planner
 │   │   ├── Progress.tsx    # Progress tracking
-│   │   └── Courses.tsx     # Course management
+│   │   ├── Courses.tsx     # Course management
+│   │   ├── Assessment.tsx  # Assessment dashboard
+│   │   ├── QuizPage.tsx    # Quiz interface
+│   │   ├── ResultPage.tsx  # Assessment results
+│   │   ├── Interview.tsx   # Interview selection
+│   │   ├── InterviewSession.tsx  # Interview flow
+│   │   └── InterviewResult.tsx   # Interview results
 │   ├── App.tsx             # Main app component
 │   ├── main.tsx            # Entry point
 │   └── index.css           # Global styles

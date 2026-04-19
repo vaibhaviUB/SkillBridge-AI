@@ -11,6 +11,9 @@ import Courses from './pages/Courses';
 import Assessment from './pages/Assessment';
 import QuizPage from './pages/QuizPage';
 import ResultPage from './pages/ResultPage';
+import Interview from './pages/Interview';
+import InterviewSession from './pages/InterviewSession';
+import InterviewResult from './pages/InterviewResult';
 
 /**
  * Main App Component
@@ -49,8 +52,10 @@ export default function App() {
             <Route path="/assessment/quiz" element={<QuizPage />} />
             <Route path="/assessment/result" element={<ResultPage />} />
             
-            {/* Interview Prep Page Route - Future feature */}
-            <Route path="/interview" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-center"><h1 className="text-4xl font-bold text-gray-800 mb-4">🎤 Interview Preparation</h1><p className="text-gray-600">AI mock interviews coming soon!</p></div></div>} />
+            {/* Interview Prep Page Routes */}
+            <Route path="/interview" element={<Interview />} />
+            <Route path="/interview/session" element={<InterviewSession />} />
+            <Route path="/interview/result" element={<InterviewResult />} />
             
             {/* Courses Page Route - AI Learning Hub */}
             <Route path="/courses" element={<Courses />} />
