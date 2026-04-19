@@ -30,11 +30,12 @@ SkillBridge AI provides a three-step approach:
 - Fresh graduates
 - Working professionals who want to upskill in AI
 
-## 📦 Features (Task 1)
+## 📦 Features (Task 1 & 2)
 
 ### Frontend
 - ✅ Responsive Navigation Bar with logo and menu items
 - ✅ Landing Page with hero section, features, and CTAs
+- ✅ **Dashboard Page** - Main user interface after login with sidebar navigation
 - ✅ Learning Path Planner with interactive course selection
 - ✅ Progress Dashboard with skill tracking and analytics
 - ✅ Login Page with email, password, and user type selection
@@ -42,6 +43,7 @@ SkillBridge AI provides a three-step approach:
 - ✅ Footer with social links and quick navigation
 - ✅ React Router for seamless page navigation
 - ✅ Mobile-responsive design with hamburger menu
+- ✅ **Dashboard Components** - Reusable Sidebar, WelcomeSection, DashboardCard, ProgressSection, RecentActivity
 
 ### Backend
 - ✅ Express.js server setup
@@ -51,6 +53,15 @@ SkillBridge AI provides a three-step approach:
 - ✅ CORS and middleware configuration
 - ✅ Error handling middleware
 
+### Dashboard Features (Task 2)
+- ✅ **Sidebar Navigation** - Collapsible sidebar with Dashboard, Planner, Progress, Assessments, Interview Prep, and Logout
+- ✅ **Welcome Section** - Dynamic greeting based on time, user name, and motivational message
+- ✅ **Feature Cards** - 4 core action cards (Learning Path, Skill Assessment, Skill Gap Analysis, Interview Prep)
+- ✅ **Progress Overview** - Stats cards showing courses completed, assessments taken, and readiness score with progress bar
+- ✅ **Recent Activity** - Activity feed showing user's recent learning activities
+- ✅ **Recommendations** - Personalized recommendations for next steps
+- ✅ **Mobile Responsive** - Hamburger menu for mobile, full sidebar for desktop
+
 ## 🏗️ Project Structure
 
 ```
@@ -59,9 +70,16 @@ skillbridge-ai/
 │   ├── src/
 │   │   ├── components/          # Reusable UI components
 │   │   │   ├── Navbar.tsx       # Navigation bar component
-│   │   │   └── Footer.tsx       # Footer component
+│   │   │   ├── Footer.tsx       # Footer component
+│   │   │   └── dashboard/       # Dashboard-specific components
+│   │   │       ├── Sidebar.tsx              # Dashboard sidebar navigation
+│   │   │       ├── DashboardCard.tsx        # Feature card component
+│   │   │       ├── WelcomeSection.tsx       # Welcome header component
+│   │   │       ├── ProgressSection.tsx      # Progress stats component
+│   │   │       └── RecentActivity.tsx       # Activity feed component
 │   │   ├── pages/               # Page components
 │   │   │   ├── Home.tsx         # Landing page
+│   │   │   ├── Dashboard.tsx    # Main dashboard page (Task 2)
 │   │   │   ├── Planner.tsx      # Learning path planner
 │   │   │   ├── Progress.tsx     # Progress dashboard
 │   │   │   ├── Login.tsx        # Login page

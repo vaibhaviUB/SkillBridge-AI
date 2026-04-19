@@ -74,11 +74,11 @@ export default function Login() {
       console.log('User logged in successfully!');
       setIsLoading(false);
       
-      // Navigate to home page after successful login
-      navigate('/');
+      // Navigate to dashboard after successful login
+      navigate('/dashboard');
       
       // Show success message (in real app, this would be a toast notification)
-      alert('Login successful! Welcome back.');
+      alert('Login successful! Welcome to SkillBridge AI Dashboard.');
     }, 1000);
   };
 
