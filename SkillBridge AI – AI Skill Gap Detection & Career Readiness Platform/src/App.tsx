@@ -8,6 +8,9 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Courses from './pages/Courses';
+import Assessment from './pages/Assessment';
+import QuizPage from './pages/QuizPage';
+import ResultPage from './pages/ResultPage';
 
 /**
  * Main App Component
@@ -41,8 +44,10 @@ export default function App() {
             {/* Signup Page Route - User registration */}
             <Route path="/signup" element={<Signup />} />
             
-            {/* Assessment Page Route - Future feature */}
-            <Route path="/assessment" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-center"><h1 className="text-4xl font-bold text-gray-800 mb-4">📝 Assessment Page</h1><p className="text-gray-600">AI-powered skill assessments coming soon!</p></div></div>} />
+            {/* Assessment Page Routes */}
+            <Route path="/assessment" element={<Assessment />} />
+            <Route path="/assessment/quiz" element={<QuizPage />} />
+            <Route path="/assessment/result" element={<ResultPage />} />
             
             {/* Interview Prep Page Route - Future feature */}
             <Route path="/interview" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-center"><h1 className="text-4xl font-bold text-gray-800 mb-4">🎤 Interview Preparation</h1><p className="text-gray-600">AI mock interviews coming soon!</p></div></div>} />
