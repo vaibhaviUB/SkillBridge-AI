@@ -1,9 +1,11 @@
 import { useState, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 /**
  * Signup Page Component
  * Allows users to create an account with name, email, password, and user type selection
+ * Connected to backend authentication API
  */
 export default function Signup() {
   const navigate = useNavigate();
@@ -12,10 +14,14 @@ export default function Signup() {
     email: '',
     password: '',
     confirmPassword: '',
-    userType: 'student', // 'student' or 'professional'
+    userType: 'Student' as 'Student' | 'Professional',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState('');
+
+  // API Base URL
+  const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000/api';
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -24,12 +30,15 @@ export default function Signup() {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
+    // Clear errors when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
         [name]: '',
       }));
+    }
+    if (serverError) {
+      setServerError('');
     }
   };
 
@@ -75,8 +84,9 @@ export default function Signup() {
   };
 
   // Handle form submission
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setServerError('');
 
     if (!validateForm()) {
       return;
@@ -84,38 +94,48 @@ export default function Signup() {
 
     setIsLoading(true);
 
-    // Simulate API call (backend integration will come later)
-    setTimeout(() => {
-      console.log('Signup Form Submitted:', formData);
-      console.log('Account created successfully!');
+    try {
+      // Send signup request to backend
+      const response = await axios.post(`${API_URL}/auth/signup`, {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        userType: formData.userType,
+      });
+
+      console.log('Signup Response:', response.data);
+
+      if (response.data.success) {
+        // Store token and user data in localStorage
+        localStorage.setItem('token', response.data.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.data.user));
+
+        console.log('Account created successfully!');
+        console.log('User:', response.data.data.user);
+
+        // Navigate to dashboard after successful signup
+        navigate('/dashboard');
+
+        // Show success message
+        alert(`Welcome to SkillBridge AI, ${response.data.data.user.name}!`);
+      }
+    } catch (error: any) {
+      console.error('Signup Error:', error);
+
+      if (error.response) {
+        // Server responded with error
+        setServerError(error.response.data.message || 'Signup failed. Please try again.');
+      } else if (error.request) {
+        // Request made but no response
+        setServerError('Unable to connect to server. Please ensure the backend is running.');
+      } else {
+        // Other errors
+        setServerError('An unexpected error occurred. Please try again.');
+      }
+    } finally {
       setIsLoading(false);
-      
-      // Navigate to dashboard after successful signup
-      navigate('/dashboard');
-      
-      // Show success message (in real app, this would be a toast notification)
-      alert('Account created successfully! Welcome to SkillBridge AI Dashboard.');
-    }, 1000);
+    }
   };
-
-  // Password strength indicator
-  const getPasswordStrength = () => {
-    const password = formData.password;
-    if (!password) return { strength: 0, text: '', color: '' };
-    
-    let strength = 0;
-    if (password.length >= 6) strength++;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-    if (strength <= 2) return { strength, text: 'Weak', color: 'text-red-600 bg-red-100' };
-    if (strength <= 3) return { strength, text: 'Medium', color: 'text-yellow-600 bg-yellow-100' };
-    return { strength, text: 'Strong', color: 'text-green-600 bg-green-100' };
-  };
-
-  const passwordStrength = getPasswordStrength();
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-violet-50 via-white to-indigo-50">
@@ -143,12 +163,22 @@ export default function Signup() {
             </div>
             <h1 className="text-2xl font-bold text-white text-center">Create Account</h1>
             <p className="text-violet-100 text-center text-sm mt-2">
-              Start your AI learning journey today
+              Join SkillBridge AI and start your learning journey
             </p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="p-8 space-y-5">
+            {/* Server Error Message */}
+            {serverError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-start">
+                <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm">{serverError}</span>
+              </div>
+            )}
+
             {/* Name Field */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -161,7 +191,8 @@ export default function Signup() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="John Doe"
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all ${
+                disabled={isLoading}
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                   errors.name ? 'border-red-500 bg-red-50' : 'border-gray-300'
                 }`}
               />
@@ -187,7 +218,8 @@ export default function Signup() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="you@example.com"
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all ${
+                disabled={isLoading}
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                   errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
                 }`}
               />
@@ -197,6 +229,34 @@ export default function Signup() {
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                   {errors.email}
+                </p>
+              )}
+            </div>
+
+            {/* User Type Field */}
+            <div>
+              <label htmlFor="userType" className="block text-sm font-medium text-gray-700 mb-2">
+                I am a
+              </label>
+              <select
+                id="userType"
+                name="userType"
+                value={formData.userType}
+                onChange={handleChange}
+                disabled={isLoading}
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                  errors.userType ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                }`}
+              >
+                <option value="Student">Student</option>
+                <option value="Professional">Working Professional</option>
+              </select>
+              {errors.userType && (
+                <p className="mt-2 text-sm text-red-600 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {errors.userType}
                 </p>
               )}
             </div>
@@ -212,21 +272,12 @@ export default function Signup() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="••••••••"
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all ${
+                placeholder="At least 6 characters"
+                disabled={isLoading}
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                   errors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'
                 }`}
               />
-              {formData.password && (
-                <div className="mt-2 flex items-center justify-between">
-                  <span className={`text-xs px-2 py-1 rounded ${passwordStrength.color}`}>
-                    {passwordStrength.text}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {formData.password.length} characters
-                  </span>
-                </div>
-              )}
               {errors.password && (
                 <p className="mt-2 text-sm text-red-600 flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -248,19 +299,12 @@ export default function Signup() {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="••••••••"
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all ${
+                placeholder="Re-enter your password"
+                disabled={isLoading}
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                   errors.confirmPassword ? 'border-red-500 bg-red-50' : 'border-gray-300'
                 }`}
               />
-              {formData.confirmPassword && formData.password === formData.confirmPassword && (
-                <p className="mt-2 text-sm text-green-600 flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Passwords match
-                </p>
-              )}
               {errors.confirmPassword && (
                 <p className="mt-2 text-sm text-red-600 flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -271,109 +315,47 @@ export default function Signup() {
               )}
             </div>
 
-            {/* User Type Selection */}
-            <div>
-              <label htmlFor="userType" className="block text-sm font-medium text-gray-700 mb-2">
-                I am a
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData((prev) => ({ ...prev, userType: 'student' }))}
-                  className={`px-4 py-3 rounded-xl border-2 font-medium transition-all duration-200 ${
-                    formData.userType === 'student'
-                      ? 'border-violet-500 bg-violet-50 text-violet-700'
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300'
-                  }`}
-                >
-                  <span className="flex items-center justify-center space-x-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                    </svg>
-                    <span>Student</span>
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData((prev) => ({ ...prev, userType: 'professional' }))}
-                  className={`px-4 py-3 rounded-xl border-2 font-medium transition-all duration-200 ${
-                    formData.userType === 'professional'
-                      ? 'border-violet-500 bg-violet-50 text-violet-700'
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300'
-                  }`}
-                >
-                  <span className="flex items-center justify-center space-x-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span>Professional</span>
-                  </span>
-                </button>
-              </div>
-              {errors.userType && (
-                <p className="mt-2 text-sm text-red-600">{errors.userType}</p>
-              )}
-            </div>
-
-            {/* Terms & Conditions */}
-            <div className="flex items-start">
-              <input
-                type="checkbox"
-                id="terms"
-                className="w-4 h-4 mt-0.5 text-violet-600 border-gray-300 rounded focus:ring-violet-500"
-              />
-              <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-                I agree to the{' '}
-                <a href="#" className="text-violet-600 hover:underline">Terms of Service</a>
-                {' '}and{' '}
-                <a href="#" className="text-violet-600 hover:underline">Privacy Policy</a>
-              </label>
-            </div>
-
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg shadow-violet-300 hover:shadow-xl hover:shadow-violet-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-violet-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
             >
               {isLoading ? (
-                <>
+                <span className="flex items-center justify-center">
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
                   Creating Account...
-                </>
+                </span>
               ) : (
                 'Create Account'
               )}
             </button>
 
-            {/* Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">or</span>
-              </div>
-            </div>
-
             {/* Login Link */}
-            <p className="text-center text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link to="/login" className="text-violet-600 hover:text-violet-700 font-semibold">
-                Sign In
-              </Link>
-            </p>
+            <div className="text-center">
+              <p className="text-gray-600">
+                Already have an account?{' '}
+                <Link
+                  to="/login"
+                  className="font-semibold text-violet-600 hover:text-violet-700 transition-colors"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
 
-        {/* Additional Info */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Join thousands of students and professionals bridging their AI skill gap
-        </p>
+        {/* Info Box */}
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <p className="text-sm font-semibold text-blue-800 mb-2">🔒 Secure Registration:</p>
+          <p className="text-xs text-blue-700">
+            Your password is encrypted and stored securely. We never share your personal information.
+          </p>
+        </div>
       </div>
     </div>
   );

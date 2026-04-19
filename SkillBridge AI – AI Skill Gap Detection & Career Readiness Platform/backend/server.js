@@ -1,30 +1,44 @@
 /**
  * SkillBridge AI Backend Server
- * Node.js + Express server for API endpoints
+ * Node.js + Express + MongoDB Server for Authentication & API
  * 
- * This is the main entry point for the backend server.
- * Currently set up with basic structure for future API development.
+ * Main entry point for the backend server with full authentication system.
  */
 
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
 // Load environment variables
 dotenv.config();
 
-// Import routes (placeholders for future implementation)
-// const authRoutes = require('./routes/auth');
-// const userRoutes = require('./routes/users');
-// const skillRoutes = require('./routes/skills');
-// const assessmentRoutes = require('./routes/assessments');
-
-// Import database configuration
-// const { connectDB } = require('./config/database');
+// Import routes
+const authRoutes = require('./routes/authRoutes');
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// ============================================
+// DATABASE CONNECTION
+// ============================================
+
+/**
+ * Connect to MongoDB database
+ */
+const connectDatabase = async () => {
+  try {
+    await connectDB();
+    console.log('✅ MongoDB connected successfully');
+  } catch (error) {
+    console.error('❌ MongoDB connection failed:', error.message);
+    // Don't exit in development - allow server to run without DB for testing
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    }
+  }
+};
 
 // ============================================
 // MIDDLEWARE
@@ -34,6 +48,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 // JSON parser middleware
@@ -49,24 +65,6 @@ if (process.env.NODE_ENV !== 'production') {
     next();
   });
 }
-
-// ============================================
-// DATABASE CONNECTION
-// ============================================
-
-/**
- * Connect to MongoDB database
- * Uncomment when MongoDB is configured
- */
-// const connectDatabase = async () => {
-//   try {
-//     await connectDB();
-//     console.log('✅ MongoDB connected successfully');
-//   } catch (error) {
-//     console.error('❌ MongoDB connection failed:', error.message);
-//     process.exit(1);
-//   }
-// };
 
 // ============================================
 // API ROUTES
@@ -89,83 +87,41 @@ app.get('/api', (req, res) => {
     description: 'AI Skill Gap Detection & Career Readiness Platform',
     endpoints: {
       health: 'GET /api/health',
-      auth: 'POST /api/auth/login, POST /api/auth/signup',
-      users: 'GET /api/users/:id, PUT /api/users/:id',
-      skills: 'GET /api/skills, POST /api/skills/assess',
-      assessments: 'GET /api/assessments, POST /api/assessments',
+      auth: {
+        signup: 'POST /api/auth/signup',
+        login: 'POST /api/auth/login',
+        me: 'GET /api/auth/me (protected)',
+        updateProfile: 'PUT /api/auth/update-profile (protected)',
+        logout: 'POST /api/auth/logout (protected)',
+      },
     },
+    documentation: 'https://github.com/skillbridge-ai/api-docs',
   });
 });
 
-// ============================================
-// AUTHENTICATION ROUTES (Placeholders)
-// ============================================
-
-/**
- * User Login
- * POST /api/auth/login
- * 
- * Expected request body:
- * {
- *   email: string,
- *   password: string,
- *   userType: 'student' | 'professional'
- * }
- */
-app.post('/api/auth/login', (req, res) => {
-  // TODO: Implement login logic with MongoDB
-  const { email, password, userType } = req.body;
-  
-  // Placeholder response
-  res.json({
-    success: true,
-    message: 'Login endpoint - To be implemented',
-    data: { email, userType },
-  });
-});
-
-/**
- * User Signup
- * POST /api/auth/signup
- * 
- * Expected request body:
- * {
- *   name: string,
- *   email: string,
- *   password: string,
- *   userType: 'student' | 'professional'
- * }
- */
-app.post('/api/auth/signup', (req, res) => {
-  // TODO: Implement signup logic with MongoDB
-  const { name, email, password, userType } = req.body;
-  
-  // Placeholder response
-  res.json({
-    success: true,
-    message: 'Signup endpoint - To be implemented',
-    data: { name, email, userType },
-  });
-});
+// Authentication routes
+app.use('/api/auth', authRoutes);
 
 // ============================================
 // ERROR HANDLING
 // ============================================
 
-// 404 Handler
+// 404 Not Found middleware
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
-    message: 'Route not found',
+    message: `Route ${req.originalUrl} not found`,
   });
 });
 
-// Global Error Handler
+// Global error handler middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
+  console.error('Server Error:', err.stack);
+  
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Internal Server Error',
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack }),
   });
 });
 
@@ -173,26 +129,28 @@ app.use((err, req, res, next) => {
 // SERVER STARTUP
 // ============================================
 
-app.listen(PORT, () => {
-  console.log('');
-  console.log('========================================');
-  console.log('  🚀 SkillBridge AI Backend Server');
-  console.log('========================================');
-  console.log(`  📍 Server running on port ${PORT}`);
-  console.log(`  🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`  🔗 API: http://localhost:${PORT}/api`);
-  console.log('========================================');
-  console.log('');
-  
-  // Connect to database (uncomment when configured)
-  // connectDatabase();
-});
+const startServer = async () => {
+  // Connect to database
+  await connectDatabase();
+
+  // Start server
+  app.listen(PORT, () => {
+    console.log('');
+    console.log('============================================');
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔗 API URL: http://localhost:${PORT}/api`);
+    console.log(`🏥 Health Check: http://localhost:${PORT}/api/health`);
+    console.log('============================================');
+    console.log('');
+  });
+};
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error('❌ Unhandled Rejection:', err);
   // Close server & exit process
-  // server.close(() => process.exit(1));
+  process.exit(1);
 });
 
 // Handle uncaught exceptions
@@ -200,3 +158,8 @@ process.on('uncaughtException', (err) => {
   console.error('❌ Uncaught Exception:', err);
   process.exit(1);
 });
+
+// Start the server
+startServer();
+
+module.exports = app;
