@@ -17,8 +17,7 @@ export default function Navbar() {
     { name: 'Assessment', path: '/assessment' },
     { name: 'Interview', path: '/interview' },
     { name: 'Report', path: '/report' },
-    { name: 'Planner', path: '/planner' },
-    { name: 'Progress', path: '/progress' },
+    { name: 'Profile', path: '/profile' },
   ];
 
   // Check if a link is active based on current path
