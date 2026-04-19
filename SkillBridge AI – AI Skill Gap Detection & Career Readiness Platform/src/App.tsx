@@ -14,6 +14,7 @@ import ResultPage from './pages/ResultPage';
 import Interview from './pages/Interview';
 import InterviewSession from './pages/InterviewSession';
 import InterviewResult from './pages/InterviewResult';
+import Report from './pages/Report';
 
 /**
  * Main App Component
@@ -59,6 +60,9 @@ export default function App() {
             
             {/* Courses Page Route - AI Learning Hub */}
             <Route path="/courses" element={<Courses />} />
+            
+            {/* Report Page Route - Skill Gap Analysis */}
+            <Route path="/report" element={<Report />} />
           </Routes>
         </main>
 

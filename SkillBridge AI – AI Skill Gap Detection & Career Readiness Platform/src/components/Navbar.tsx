@@ -16,6 +16,7 @@ export default function Navbar() {
     { name: 'Courses', path: '/courses' },
     { name: 'Assessment', path: '/assessment' },
     { name: 'Interview', path: '/interview' },
+    { name: 'Report', path: '/report' },
     { name: 'Planner', path: '/planner' },
     { name: 'Progress', path: '/progress' },
   ];

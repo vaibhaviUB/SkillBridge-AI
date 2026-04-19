@@ -29,7 +29,7 @@ const featureCards = [
     description: 'Identify missing skills with personalized recommendations. Get a detailed report on what you need to learn to become industry-ready.',
     icon: '📈',
     buttonLabel: 'View Report',
-    linkTo: '/progress',
+    linkTo: '/report',
     color: 'green',
   },
   {
